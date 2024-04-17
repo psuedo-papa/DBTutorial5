@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="classicmodelsModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="customers">
+          <Key>
+            <PropertyRef Name="customerNumber" />
+          </Key>
+          <Property Name="customerNumber" Type="int" Nullable="false" />
+          <Property Name="customerName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contactLastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contactFirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="addressLine1" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="addressLine2" Type="varchar" MaxLength="50" />
+          <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="state" Type="varchar" MaxLength="50" />
+          <Property Name="postalCode" Type="varchar" MaxLength="15" />
+          <Property Name="country" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="salesRepEmployeeNumber" Type="int" />
+          <Property Name="creditLimit" Type="double" />
+        </EntityType>
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="employeeNumber" />
+          </Key>
+          <Property Name="employeeNumber" Type="int" Nullable="false" />
+          <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="extension" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="officeCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="reportsTo" Type="int" />
+          <Property Name="jobTitle" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="offices">
+          <Key>
+            <PropertyRef Name="officeCode" />
+          </Key>
+          <Property Name="officeCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="addressLine1" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="addressLine2" Type="varchar" MaxLength="50" />
+          <Property Name="state" Type="varchar" MaxLength="50" />
+          <Property Name="country" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="postalCode" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="territory" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orderdetails">
+          <Key>
+            <PropertyRef Name="orderNumber" />
+            <PropertyRef Name="productCode" />
+          </Key>
+          <Property Name="orderNumber" Type="int" Nullable="false" />
+          <Property Name="productCode" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="quantityOrdered" Type="int" Nullable="false" />
+          <Property Name="priceEach" Type="double" Nullable="false" />
+          <Property Name="orderLineNumber" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="orderNumber" />
+          </Key>
+          <Property Name="orderNumber" Type="int" Nullable="false" />
+          <Property Name="orderDate" Type="date" Nullable="false" />
+          <Property Name="requiredDate" Type="date" Nullable="false" />
+          <Property Name="shippedDate" Type="date" />
+          <Property Name="status" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="comments" Type="text" />
+          <Property Name="customerNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="payments">
+          <Key>
+            <PropertyRef Name="customerNumber" />
+            <PropertyRef Name="checkNumber" />
+          </Key>
+          <Property Name="customerNumber" Type="int" Nullable="false" />
+          <Property Name="checkNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="paymentDate" Type="date" Nullable="false" />
+          <Property Name="amount" Type="double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="productlines">
+          <Key>
+            <PropertyRef Name="productLine" />
+          </Key>
+          <Property Name="productLine" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="textDescription" Type="varchar" MaxLength="4000" />
+          <Property Name="htmlDescription" Type="mediumtext" />
+          <Property Name="image" Type="mediumblob" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="productCode" />
+          </Key>
+          <Property Name="productCode" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="productName" Type="varchar" MaxLength="70" Nullable="false" />
+          <Property Name="productLine" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="productScale" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="productVendor" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="productDescription" Type="text" Nullable="false" />
+          <Property Name="quantityInStock" Type="smallint" Nullable="false" />
+          <Property Name="buyPrice" Type="double" Nullable="false" />
+          <Property Name="MSRP" Type="double" Nullable="false" />
+        </EntityType>
+        <Association Name="customers_ibfk_1">
+          <End Role="employees" Type="Self.employees" Multiplicity="0..1" />
+          <End Role="customers" Type="Self.customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="employeeNumber" />
+            </Principal>
+            <Dependent Role="customers">
+              <PropertyRef Name="salesRepEmployeeNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="employees_ibfk_1">
+          <End Role="employees" Type="Self.employees" Multiplicity="0..1" />
+          <End Role="employees1" Type="Self.employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="employeeNumber" />
+            </Principal>
+            <Dependent Role="employees1">
+              <PropertyRef Name="reportsTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="employees_ibfk_2">
+          <End Role="offices" Type="Self.offices" Multiplicity="1" />
+          <End Role="employees" Type="Self.employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="offices">
+              <PropertyRef Name="officeCode" />
+            </Principal>
+            <Dependent Role="employees">
+              <PropertyRef Name="officeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="orderdetails_ibfk_1">
+          <End Role="orders" Type="Self.orders" Multiplicity="1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="orderNumber" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="orderNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="orderdetails_ibfk_2">
+          <End Role="products" Type="Self.products" Multiplicity="1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="productCode" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="productCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="orders_ibfk_1">
+          <End Role="customers" Type="Self.customers" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="customerNumber" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="customerNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="payments_ibfk_1">
+          <End Role="customers" Type="Self.customers" Multiplicity="1" />
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="customerNumber" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="customerNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="products_ibfk_1">
+          <End Role="productlines" Type="Self.productlines" Multiplicity="1" />
+          <End Role="products" Type="Self.products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productlines">
+              <PropertyRef Name="productLine" />
+            </Principal>
+            <Dependent Role="products">
+              <PropertyRef Name="productLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="classicmodelsModelStoreContainer">
+          <EntitySet Name="customers" EntityType="Self.customers" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="employees" EntityType="Self.employees" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="offices" EntityType="Self.offices" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="orderdetails" EntityType="Self.orderdetails" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="orders" EntityType="Self.orders" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="payments" EntityType="Self.payments" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="productlines" EntityType="Self.productlines" Schema="classicmodels" store:Type="Tables" />
+          <EntitySet Name="products" EntityType="Self.products" Schema="classicmodels" store:Type="Tables" />
+          <AssociationSet Name="customers_ibfk_1" Association="Self.customers_ibfk_1">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="customers" EntitySet="customers" />
+          </AssociationSet>
+          <AssociationSet Name="employees_ibfk_1" Association="Self.employees_ibfk_1">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="employees1" EntitySet="employees" />
+          </AssociationSet>
+          <AssociationSet Name="employees_ibfk_2" Association="Self.employees_ibfk_2">
+            <End Role="offices" EntitySet="offices" />
+            <End Role="employees" EntitySet="employees" />
+          </AssociationSet>
+          <AssociationSet Name="orderdetails_ibfk_1" Association="Self.orderdetails_ibfk_1">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="orderdetails_ibfk_2" Association="Self.orderdetails_ibfk_2">
+            <End Role="products" EntitySet="products" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="orders_ibfk_1" Association="Self.orders_ibfk_1">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="payments_ibfk_1" Association="Self.payments_ibfk_1">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="products_ibfk_1" Association="Self.products_ibfk_1">
+            <End Role="productlines" EntitySet="productlines" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="classicmodelsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="customers">
+          <Key>
+            <PropertyRef Name="customerNumber" />
+          </Key>
+          <Property Name="customerNumber" Type="Int32" Nullable="false" />
+          <Property Name="customerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contactLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contactFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="addressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="addressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="postalCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="salesRepEmployeeNumber" Type="Int32" />
+          <Property Name="creditLimit" Type="Double" />
+          <NavigationProperty Name="employees" Relationship="Self.customers_ibfk_1" FromRole="customers" ToRole="employees" />
+          <NavigationProperty Name="orders" Relationship="Self.orders_ibfk_1" FromRole="customers" ToRole="orders" />
+          <NavigationProperty Name="payments" Relationship="Self.payments_ibfk_1" FromRole="customers" ToRole="payments" />
+        </EntityType>
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="employeeNumber" />
+          </Key>
+          <Property Name="employeeNumber" Type="Int32" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="officeCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="reportsTo" Type="Int32" />
+          <Property Name="jobTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="customers" Relationship="Self.customers_ibfk_1" FromRole="employees" ToRole="customers" />
+          <NavigationProperty Name="employees1" Relationship="Self.employees_ibfk_1" FromRole="employees" ToRole="employees1" />
+          <NavigationProperty Name="employees2" Relationship="Self.employees_ibfk_1" FromRole="employees1" ToRole="employees" />
+          <NavigationProperty Name="offices" Relationship="Self.employees_ibfk_2" FromRole="employees" ToRole="offices" />
+        </EntityType>
+        <EntityType Name="offices">
+          <Key>
+            <PropertyRef Name="officeCode" />
+          </Key>
+          <Property Name="officeCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="addressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="addressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="postalCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="territory" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="employees" Relationship="Self.employees_ibfk_2" FromRole="offices" ToRole="employees" />
+        </EntityType>
+        <EntityType Name="orderdetails">
+          <Key>
+            <PropertyRef Name="orderNumber" />
+            <PropertyRef Name="productCode" />
+          </Key>
+          <Property Name="orderNumber" Type="Int32" Nullable="false" />
+          <Property Name="productCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="quantityOrdered" Type="Int32" Nullable="false" />
+          <Property Name="priceEach" Type="Double" Nullable="false" />
+          <Property Name="orderLineNumber" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="orders" Relationship="Self.orderdetails_ibfk_1" FromRole="orderdetails" ToRole="orders" />
+          <NavigationProperty Name="products" Relationship="Self.orderdetails_ibfk_2" FromRole="orderdetails" ToRole="products" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="orderNumber" />
+          </Key>
+          <Property Name="orderNumber" Type="Int32" Nullable="false" />
+          <Property Name="orderDate" Type="DateTime" Nullable="false" />
+          <Property Name="requiredDate" Type="DateTime" Nullable="false" />
+          <Property Name="shippedDate" Type="DateTime" />
+          <Property Name="status" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="comments" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="customerNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="customers" Relationship="Self.orders_ibfk_1" FromRole="orders" ToRole="customers" />
+          <NavigationProperty Name="orderdetails" Relationship="Self.orderdetails_ibfk_1" FromRole="orders" ToRole="orderdetails" />
+        </EntityType>
+        <EntityType Name="payments">
+          <Key>
+            <PropertyRef Name="customerNumber" />
+            <PropertyRef Name="checkNumber" />
+          </Key>
+          <Property Name="customerNumber" Type="Int32" Nullable="false" />
+          <Property Name="checkNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="paymentDate" Type="DateTime" Nullable="false" />
+          <Property Name="amount" Type="Double" Nullable="false" />
+          <NavigationProperty Name="customers" Relationship="Self.payments_ibfk_1" FromRole="payments" ToRole="customers" />
+        </EntityType>
+        <EntityType Name="productlines">
+          <Key>
+            <PropertyRef Name="productLine" />
+          </Key>
+          <Property Name="productLine" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="textDescription" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="htmlDescription" Type="String" MaxLength="16777215" FixedLength="false" Unicode="false" />
+          <Property Name="image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="products" Relationship="Self.products_ibfk_1" FromRole="productlines" ToRole="products" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="productCode" />
+          </Key>
+          <Property Name="productCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="productName" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="productLine" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="productScale" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="productVendor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="productDescription" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="quantityInStock" Type="Int16" Nullable="false" />
+          <Property Name="buyPrice" Type="Double" Nullable="false" />
+          <Property Name="MSRP" Type="Double" Nullable="false" />
+          <NavigationProperty Name="orderdetails" Relationship="Self.orderdetails_ibfk_2" FromRole="products" ToRole="orderdetails" />
+          <NavigationProperty Name="productlines" Relationship="Self.products_ibfk_1" FromRole="products" ToRole="productlines" />
+        </EntityType>
+        <Association Name="customers_ibfk_1">
+          <End Role="employees" Type="Self.employees" Multiplicity="0..1" />
+          <End Role="customers" Type="Self.customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="employeeNumber" />
+            </Principal>
+            <Dependent Role="customers">
+              <PropertyRef Name="salesRepEmployeeNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="orders_ibfk_1">
+          <End Role="customers" Type="Self.customers" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="customerNumber" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="customerNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="payments_ibfk_1">
+          <End Role="customers" Type="Self.customers" Multiplicity="1" />
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="customerNumber" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="customerNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="employees_ibfk_1">
+          <End Role="employees" Type="Self.employees" Multiplicity="0..1" />
+          <End Role="employees1" Type="Self.employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="employeeNumber" />
+            </Principal>
+            <Dependent Role="employees1">
+              <PropertyRef Name="reportsTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="employees_ibfk_2">
+          <End Role="offices" Type="Self.offices" Multiplicity="1" />
+          <End Role="employees" Type="Self.employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="offices">
+              <PropertyRef Name="officeCode" />
+            </Principal>
+            <Dependent Role="employees">
+              <PropertyRef Name="officeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="orderdetails_ibfk_1">
+          <End Role="orders" Type="Self.orders" Multiplicity="1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="orderNumber" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="orderNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="orderdetails_ibfk_2">
+          <End Role="products" Type="Self.products" Multiplicity="1" />
+          <End Role="orderdetails" Type="Self.orderdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="productCode" />
+            </Principal>
+            <Dependent Role="orderdetails">
+              <PropertyRef Name="productCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="products_ibfk_1">
+          <End Role="productlines" Type="Self.productlines" Multiplicity="1" />
+          <End Role="products" Type="Self.products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productlines">
+              <PropertyRef Name="productLine" />
+            </Principal>
+            <Dependent Role="products">
+              <PropertyRef Name="productLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="classicmodelsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="customers" EntityType="Self.customers" />
+          <EntitySet Name="employees" EntityType="Self.employees" />
+          <EntitySet Name="offices" EntityType="Self.offices" />
+          <EntitySet Name="orderdetails" EntityType="Self.orderdetails" />
+          <EntitySet Name="orders" EntityType="Self.orders" />
+          <EntitySet Name="payments" EntityType="Self.payments" />
+          <EntitySet Name="productlines" EntityType="Self.productlines" />
+          <EntitySet Name="products" EntityType="Self.products" />
+          <AssociationSet Name="customers_ibfk_1" Association="Self.customers_ibfk_1">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="customers" EntitySet="customers" />
+          </AssociationSet>
+          <AssociationSet Name="orders_ibfk_1" Association="Self.orders_ibfk_1">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="payments_ibfk_1" Association="Self.payments_ibfk_1">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="employees_ibfk_1" Association="Self.employees_ibfk_1">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="employees1" EntitySet="employees" />
+          </AssociationSet>
+          <AssociationSet Name="employees_ibfk_2" Association="Self.employees_ibfk_2">
+            <End Role="offices" EntitySet="offices" />
+            <End Role="employees" EntitySet="employees" />
+          </AssociationSet>
+          <AssociationSet Name="orderdetails_ibfk_1" Association="Self.orderdetails_ibfk_1">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="orderdetails_ibfk_2" Association="Self.orderdetails_ibfk_2">
+            <End Role="products" EntitySet="products" />
+            <End Role="orderdetails" EntitySet="orderdetails" />
+          </AssociationSet>
+          <AssociationSet Name="products_ibfk_1" Association="Self.products_ibfk_1">
+            <End Role="productlines" EntitySet="productlines" />
+            <End Role="products" EntitySet="products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="classicmodelsModelStoreContainer" CdmEntityContainer="classicmodelsEntities">
+          <EntitySetMapping Name="customers">
+            <EntityTypeMapping TypeName="classicmodelsModel.customers">
+              <MappingFragment StoreEntitySet="customers">
+                <ScalarProperty Name="customerNumber" ColumnName="customerNumber" />
+                <ScalarProperty Name="customerName" ColumnName="customerName" />
+                <ScalarProperty Name="contactLastName" ColumnName="contactLastName" />
+                <ScalarProperty Name="contactFirstName" ColumnName="contactFirstName" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="addressLine1" ColumnName="addressLine1" />
+                <ScalarProperty Name="addressLine2" ColumnName="addressLine2" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="postalCode" ColumnName="postalCode" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="salesRepEmployeeNumber" ColumnName="salesRepEmployeeNumber" />
+                <ScalarProperty Name="creditLimit" ColumnName="creditLimit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employees">
+            <EntityTypeMapping TypeName="classicmodelsModel.employees">
+              <MappingFragment StoreEntitySet="employees">
+                <ScalarProperty Name="employeeNumber" ColumnName="employeeNumber" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="extension" ColumnName="extension" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="officeCode" ColumnName="officeCode" />
+                <ScalarProperty Name="reportsTo" ColumnName="reportsTo" />
+                <ScalarProperty Name="jobTitle" ColumnName="jobTitle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="offices">
+            <EntityTypeMapping TypeName="classicmodelsModel.offices">
+              <MappingFragment StoreEntitySet="offices">
+                <ScalarProperty Name="officeCode" ColumnName="officeCode" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="addressLine1" ColumnName="addressLine1" />
+                <ScalarProperty Name="addressLine2" ColumnName="addressLine2" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="postalCode" ColumnName="postalCode" />
+                <ScalarProperty Name="territory" ColumnName="territory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orderdetails">
+            <EntityTypeMapping TypeName="classicmodelsModel.orderdetails">
+              <MappingFragment StoreEntitySet="orderdetails">
+                <ScalarProperty Name="orderNumber" ColumnName="orderNumber" />
+                <ScalarProperty Name="productCode" ColumnName="productCode" />
+                <ScalarProperty Name="quantityOrdered" ColumnName="quantityOrdered" />
+                <ScalarProperty Name="priceEach" ColumnName="priceEach" />
+                <ScalarProperty Name="orderLineNumber" ColumnName="orderLineNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="classicmodelsModel.orders">
+              <MappingFragment StoreEntitySet="orders">
+                <ScalarProperty Name="orderNumber" ColumnName="orderNumber" />
+                <ScalarProperty Name="orderDate" ColumnName="orderDate" />
+                <ScalarProperty Name="requiredDate" ColumnName="requiredDate" />
+                <ScalarProperty Name="shippedDate" ColumnName="shippedDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="customerNumber" ColumnName="customerNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="payments">
+            <EntityTypeMapping TypeName="classicmodelsModel.payments">
+              <MappingFragment StoreEntitySet="payments">
+                <ScalarProperty Name="customerNumber" ColumnName="customerNumber" />
+                <ScalarProperty Name="checkNumber" ColumnName="checkNumber" />
+                <ScalarProperty Name="paymentDate" ColumnName="paymentDate" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="productlines">
+            <EntityTypeMapping TypeName="classicmodelsModel.productlines">
+              <MappingFragment StoreEntitySet="productlines">
+                <ScalarProperty Name="productLine" ColumnName="productLine" />
+                <ScalarProperty Name="textDescription" ColumnName="textDescription" />
+                <ScalarProperty Name="htmlDescription" ColumnName="htmlDescription" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="classicmodelsModel.products">
+              <MappingFragment StoreEntitySet="products">
+                <ScalarProperty Name="productCode" ColumnName="productCode" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productLine" ColumnName="productLine" />
+                <ScalarProperty Name="productScale" ColumnName="productScale" />
+                <ScalarProperty Name="productVendor" ColumnName="productVendor" />
+                <ScalarProperty Name="productDescription" ColumnName="productDescription" />
+                <ScalarProperty Name="quantityInStock" ColumnName="quantityInStock" />
+                <ScalarProperty Name="buyPrice" ColumnName="buyPrice" />
+                <ScalarProperty Name="MSRP" ColumnName="MSRP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
